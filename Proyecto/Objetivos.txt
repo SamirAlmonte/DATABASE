@@ -1,0 +1,33 @@
+#Peticiones:
+#
+#
+#Hacer un programa conjunto a una base de datos:
+#-El programa accede a una base de datos 
+#
+#-Agregara info en una tabla de informacion llamada Estudiantes 
+#     Matricula
+#     Nombre
+#     Apellido
+#     Direccion 
+#     Telefono
+#-Buscar por matricula todos los datos
+#-Crear una tabla que se llame Asignaturas, donde con la matricula, obtengamos que asignación esten tomando. 
+#-Permitir consultar que asignaturas esta tomando el estudiante 
+#    Consulta general de las asignaturas, y su relacion con cada estudiante.
+#
+#
+#Objetivos:
+#Crear un archivo Main, en donde se llamaran a funciones: 
+# - crear una base de datos ITLA,                                                                                   (HECHO)
+# - crear una tabla de informacion llamada Estudiantes  campos (Mat,Nombre,Apellido,Direccion,Tel)                  (HECHO)
+# - Crear una tabla que se llame Asignaturas campos (Matricula,Nombre, Asignatura)                                  (HECHO)
+#
+# - Eliminar una columna en base a un parametro.                                                                    (PENDIENTE)
+# 
+# - Consulta de las tablas                                                                                          (PENDIENTE)
+#   Decision de busqueda entre la tabla Estudiantes y Asignaturas                               (HECHO)
+#   Busqueda en base a un parametro, uso en tabla Asignaturas                                                       (PENDIENTE)
+# 
+# - Agregar filas a la tabla                                                                                        (PENDIENTE)
+#
+# - Actualizar datos de una tabla                                                                                   (PENDIENTE)

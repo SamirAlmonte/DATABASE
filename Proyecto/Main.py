@@ -1,6 +1,9 @@
 #Importo sql lite y lo nombro como sql para acortar.
 import sqlite3 as sql
-import string 
+ 
+#Base de datos ITLA por
+#Samir Almonte
+#Zayas
 
 #Referentes: 
 #https://www.tutorialesprogramacionya.com/pythonya/detalleconcepto.php?punto=87&codigo=88&inicio=75
@@ -11,8 +14,7 @@ def crearDB():
     conn=sql.connect("ITLA.db")
     conn.commit()
     conn.close()
-#Arreglar la funcion de Crear tabla,
-#agregando una variable y haciendo uso de la sintaxix(F"Variable")
+
 def crearTablaEstu():
     conn=sql.connect("ITLA.db")
     try:       
@@ -44,7 +46,8 @@ def crearTablaAsig():
 def insertarFilaEstu():
     conn=sql.connect("ITLA.db")
     cursor = conn.cursor()
-    print("Ingrese los siguientes datos \n\n")
+
+    print("Ingrese los siguientes datos: \n\n")
     Matricula = int(input("Matricula:\n"))
     Nombre = input("Nombre:\n")
     Apellido = input("Apellido:\n")
@@ -70,23 +73,47 @@ def insertarFilaAsign():
     conn.close()
 
 
-def borrarFilas():
+def borrarFilas(tabla):
     conn=sql.connect("ITLA.db")
     matricula=input("Ingrese la matricula que quiere borrar:")
-    conn.execute(f"delete from Estudiantes where Matricula='{matricula}' ")
+    conn.execute(f"delete from {tabla} where Matricula='{matricula}' ")
     print("El estudiante ha sido eliminado")
     conn.commit()
     conn.close()
 
 
 def salir():
-    crearDB()
-    print ("Bye")
+    sql.connect("ITLA.db").close
+    borrarPantalla()
+    print ("Bye-Bye")
+
+def actualizarAsig():
+    conn=sql.connect("ITLA.db")
+    cursor = conn.cursor()
+
+    print("Actualice los siguientes datos \n\n")
+    Matricula = int(input("Matricula:\n"))
+    Nombre = input("Nombre:\n")
+    Asignatura = input("Asignatura:\n")
 
 
+    cursor.execute(f" update Asignacion set Matricula= {Matricula},{Nombre},{Asignatura}")
 
+    
 
+def actualizarEstu():
+    conn=sql.connect("ITLA.db")
+    cursor = conn.cursor()
 
+    print("Actualice los siguientes datos \n\n")
+    Matricula = int(input("Matricula:\n"))
+    Nombre = input("Nombre:\n")
+    Apellido = input("Apellido:\n")
+    Direccion = input("Direccion:\n")
+    Telefono = int(input("Telefono:\n"))
+
+    cursor.execute(f" update Asignacion set Matricula ({Matricula},'{Nombre}','{Apellido}','{Direccion}',{Telefono})")
+    
 
 
 def readRows(tabla):
@@ -97,8 +124,28 @@ def readRows(tabla):
     datos = cursor.fetchall()
     conn.commit()
     conn.close()
-    print("Tabla {tabla} \n",datos)
+    print(f"Tabla {tabla} \n",datos)
     print("")
+
+    
+def buscar(tabla):
+    conn=sql.connect("ITLA.db")
+    cursor = conn.cursor()
+    matricula=(input("Ingrese la matricula que quiere buscar:\n"))
+    instruccion = f"SELECT * FROM {tabla} WHERE Matricula = {matricula}"
+    cursor.execute(instruccion)
+    datos = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    print(f"Tabla {tabla} \n",datos)
+    print("")
+
+def borrarPantalla(): 
+    import os
+    if os.name == "posix":
+        os.system ("clear")
+    elif os.name == "ce" or os.name == "nt" or os.name == "dos":
+        os.system ("cls")
 
 #Llamo las funciones 
 if __name__ == "__main__":
@@ -106,57 +153,78 @@ if __name__ == "__main__":
         print("""
         1 - Inicializar Base de Datos
         2 - Crear
-        3 - Datos
+        3 - Lectura
         4 - Añadir
         5 - Actualizar
         6 - Busqueda
         7 - Borrar
         8 - Salir
+        0 - Limpiar la pantalla
     """)
         guia = int(input("Escriba el numero para realizar la operacion deseada"))
-        if guia == 1:
+        if guia == 1:   #Inicializar
             crearDB()
             print("Se ha iniciado la base de datos")
-        elif guia == 2:
-            guia = input("¿Que tabla quieres crear?")
-            crearTablaAsig()
-            #crearTabla(guia)
+            borrarPantalla()
 
-        elif guia == 3:
-            pass
+        elif guia == 2: #Crear
+            guia = input("¿Que tabla quieres crear?\n")
+            
+            if guia == "Estudiantes" or "estudiantes":
+                crearTablaEstu()
+            elif guia == "Asignacion" or "asignacion":
+                crearTablaAsig()
+            else:
+                print("Ese nombre no, otro-")
+                
 
-        elif guia == 4:
-            pass
-
-        elif guia == 5:
-           pass 
-
-        elif guia == 6:
-            readRows("Asignacion") 
+        elif guia == 3: #Lectura
+            guia = input("¿Que tabla quieres leer?\n")
+            
         
-        elif guia == 7:
-             borrarFilas()
+        elif guia == 4: #Anadir, pendiente
+           guia = input("¿A que tabla quieres añadir una fila?\n") 
+           if guia == "Estudiantes" or "estudiantes":
+                insertarFilaAsign()
+           elif guia == "Asignacion" or "asignacion":
+                insertarFilaEstu()
+           else:
+                print("Ese nombre no, otro-")  
+           
+        elif guia == 5: #Actualizar
+            guia = input("¿Que tabla quieres actualizar?\n")
+            if guia == "Estudiantes" or "estudiantes":
+                actualizarEstu()
+            elif guia == "Asignacion" or "asignacion":
+                actualizarAsig()
+    
+        elif guia == 6: #Busqueda
+            guia = input("¿En que tabla quieres buscar?\n")
+            if guia == "Estudiantes" or "estudiantes" or "Asignacion" or "asignacion":
+                buscar(guia)
+            else:
+                print("Esa tabla no existe")
+        
+        elif guia == 7: #Borrar
+            guia = input("¿En que tabla quieres borrar una fila?\n")
+            if guia == "Estudiantes" or "estudiantes" or "Asignacion" or "asignacion":
+                borrarFilas(guia)
+            else:
+                print("Esa tabla no existe")
 
-        elif guia == 8:
-             borrarFilas()    
+        elif guia == 8: #Salir
+             salir()   
 
+        elif guia == 0: #Limpiar la pantalla
+            borrarPantalla()
         else:
             break
-    #crearTablaEstu()
-    #insertarFilaAsign(20220726,"Samir","Educacion Fisica")
-    #insertarFilaEstu(20220726,"Samir","Almonte","resp. Villa Carmen",8097775525)
-    
-
-    
-
-#def borrar():
-    #bnom=input("Ingrese el nombre del contacto que quiere borra :")
-    #conexion.execute(f"delete from Estudiantes where Matricula='{bnom}' ")
-    #print("El contacto esta borrado")
-    #conn.commit()
-    #conn=sql.connect("ITLA.db")
+   
 
 
 
 
-    
+
+
+
+

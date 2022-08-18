@@ -22,11 +22,11 @@
 # - crear una tabla de informacion llamada Estudiantes  campos (Mat,Nombre,Apellido,Direccion,Tel)                  (HECHO)
 # - Crear una tabla que se llame Asignaturas campos (Matricula,Nombre, Asignatura)                                  (HECHO)
 #
-# - Eliminar una columna en base a un parametro.                                                                    (PENDIENTE)
+# - Eliminar una columna en base a un parametro.                                                                    (HECHO)
 # 
-# - Consulta de las tablas                                                                                          (PENDIENTE)
+# - Consulta de las tablas                                                                                          (HECHO)
 #   Decision de busqueda entre la tabla Estudiantes y Asignaturas                               (HECHO)
-#   Busqueda en base a un parametro, uso en tabla Asignaturas                                                       (PENDIENTE)
+#   Busqueda en base a un parametro                                                                                 (HECHO)
 # 
 # - Agregar filas a la tabla                                                                                        (PENDIENTE)
 #

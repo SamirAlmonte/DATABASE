@@ -1,4 +1,5 @@
 #Importo sql lite y lo nombro como sql para acortar.
+from asyncore import read
 import sqlite3 as sql
  
 #Base de datos ITLA por
@@ -19,11 +20,11 @@ def crearTablaEstu():
     conn=sql.connect("ITLA.db")
     try:       
         conn.execute("""create table Estudiantes  (
-                           Matricula integer,
-                            Nombre text,
-                            Apellido text,
-                            Direccion text,
-                            Telefono integer
+                           Matricula integer NOT NULL,
+                            Nombre text NOT NULL,
+                            Apellido text NOT NULL,
+                            Direccion text NOT NULL,
+                            Telefono integer NOT NULL
                         )""")
         print("se creo la tabla Estudiantes")                        
     except sql.OperationalError:
@@ -33,14 +34,14 @@ def crearTablaEstu():
 def crearTablaAsig():
     conn=sql.connect("ITLA.db")
     try:      
-        conn.execute("""create table Asignacion  (
+        conn.execute("""create table Asignaturas  (
                             Matricula integer NOT NULL,
                             Nombre text NOT NULL,
                             Asignatura text NOT NULL
                         )""")
-        print("se creo la tabla Asignacion")                        
+        print("se creo la tabla Asignaturas")                        
     except sql.OperationalError:
-        print("La tabla Asignacion ya existe")         
+        print("La tabla Asignaturas ya existe")         
     conn.close()
 
 def insertarFilaEstu():
@@ -54,10 +55,10 @@ def insertarFilaEstu():
     Direccion = input("Direccion:\n")
     Telefono = int(input("Telefono:\n"))
 
-    instruccion = f"INSERT INTO Estudiantes VALUEs ({Matricula},'{Nombre}','{Apellido}','{Direccion}',{Telefono})"
+    instruccion = f"INSERT INTO Estudiantes VALUES ({Matricula},'{Nombre}','{Apellido}','{Direccion}',{Telefono})"
     cursor.execute(instruccion)
     conn.commit()
-    conn.close()
+    
 
 def insertarFilaAsign():
     conn=sql.connect("ITLA.db")
@@ -67,10 +68,10 @@ def insertarFilaAsign():
     Nombre = input("Nombre:\n")
     Asignatura = input("Asignatura:\n")
 
-    instruccion = f"INSERT INTO Asignacion VALUEs ({Matricula},'{Nombre}','{Asignatura}')"
+    instruccion = f"INSERT INTO Asignatura VALUES ({Matricula},'{Nombre}','{Asignatura}')"
     cursor.execute(instruccion)
     conn.commit()
-    conn.close()
+
 
 
 def borrarFilas(tabla):
@@ -79,13 +80,15 @@ def borrarFilas(tabla):
     conn.execute(f"delete from {tabla} where Matricula='{matricula}' ")
     print("El estudiante ha sido eliminado")
     conn.commit()
-    conn.close()
 
 
 def salir():
+    input("\nPresione Enter para continuar")
     sql.connect("ITLA.db").close
-    borrarPantalla()
     print ("Bye-Bye")
+    input()
+    borrarPantalla()
+    
 
 def actualizarAsig():
     conn=sql.connect("ITLA.db")
@@ -95,7 +98,6 @@ def actualizarAsig():
     Matricula = int(input("Matricula:\n"))
     Nombre = input("Nombre:\n")
     Asignatura = input("Asignatura:\n")
-
 
     cursor.execute(f" update Asignacion set Matricula= {Matricula},{Nombre},{Asignatura}")
 
@@ -136,7 +138,6 @@ def buscar(tabla):
     cursor.execute(instruccion)
     datos = cursor.fetchall()
     conn.commit()
-    conn.close()
     print(f"Tabla {tabla} \n",datos)
     print("")
 
@@ -149,66 +150,96 @@ def borrarPantalla():
 
 #Llamo las funciones 
 if __name__ == "__main__":
+    borrarPantalla()
     while True:
+        borrarPantalla()
         print("""
         1 - Inicializar Base de Datos
         2 - Crear
         3 - Lectura
-        4 - Añadir
-        5 - Actualizar
-        6 - Busqueda
+        4 - Busqueda
+        5 - Añadir
+        6 - Actualizar
         7 - Borrar
         8 - Salir
         0 - Limpiar la pantalla
     """)
-        guia = int(input("Escriba el numero para realizar la operacion deseada"))
+        guia = int(input("Escriba el numero para realizar la operacion deseada\n"))
         if guia == 1:   #Inicializar
             crearDB()
             print("Se ha iniciado la base de datos")
+            input("Presione la tecla Enter para continuar")
             borrarPantalla()
 
         elif guia == 2: #Crear
-            guia = input("¿Que tabla quieres crear?\n")
-            
-            if guia == "Estudiantes" or "estudiantes":
-                crearTablaEstu()
-            elif guia == "Asignacion" or "asignacion":
-                crearTablaAsig()
-            else:
-                print("Ese nombre no, otro-")
+            borrarPantalla()
+            crearTablaEstu()
+            crearTablaAsig()
+            input("\n Se han creado las tablas con exito")
+            borrarPantalla()
                 
 
         elif guia == 3: #Lectura
-            guia = input("¿Que tabla quieres leer?\n")
+            guia = input("¿Que tabla quieres leer?\n[1]Asignatura\n[2]Estudiantes")
+            if guia == "1":
+                readRows("Asignatura")
+                input("Presione la tecla Enter para continuar")
+            elif guia =="2":
+                readRows("Estudiantes")
+                input("Presione la tecla Enter para continuar")
+            
             
         
-        elif guia == 4: #Anadir, pendiente
-           guia = input("¿A que tabla quieres añadir una fila?\n") 
-           if guia == "Estudiantes" or "estudiantes":
+        elif guia == 5: #Anadir, pendiente
+            borrarPantalla()
+            guia = input("¿A que tabla quieres añadir una fila?\n[1]Asignatura\n[2]Estudiantes") 
+            if guia == "1":
                 insertarFilaAsign()
-           elif guia == "Asignacion" or "asignacion":
+                input("Presione la tecla Enter para continuar")
+            elif guia =="2":
                 insertarFilaEstu()
-           else:
-                print("Ese nombre no, otro-")  
-           
-        elif guia == 5: #Actualizar
-            guia = input("¿Que tabla quieres actualizar?\n")
-            if guia == "Estudiantes" or "estudiantes":
-                actualizarEstu()
-            elif guia == "Asignacion" or "asignacion":
-                actualizarAsig()
-    
-        elif guia == 6: #Busqueda
-            guia = input("¿En que tabla quieres buscar?\n")
-            if guia == "Estudiantes" or "estudiantes" or "Asignacion" or "asignacion":
-                buscar(guia)
+                input("Presione la tecla Enter para continuar")
             else:
                 print("Esa tabla no existe")
-        
+                input("Presione la tecla Enter para continuar")
+            borrarPantalla()
+            
+           
+        elif guia == 6: #Actualizar
+            borrarPantalla()
+            guia = input("¿Que tabla quieres actualizar?\n[1]Asignatura\n[2]Estudiantes")
+            if guia == "2":
+                actualizarEstu()
+                input("Presione la tecla Enter para continuar")
+            elif guia =="1":
+                actualizarAsig()
+                input("Presione la tecla Enter para continuar")
+            print("Se ha actualizado la tabla con exito")
+            borrarPantalla()
+
+        elif guia == 4: #Busqueda
+            guia = input("¿En que tabla quieres buscar?\n[1]Asignatura\n[2]Estudiantes")
+            if guia == "1":
+                guia = "Asignatura"
+                buscar(guia)
+                input("Presione la tecla Enter para continuar")
+            elif guia== "2":
+                guia = "Estudiantes"
+                buscar(guia)
+                input("Presione la tecla Enter para continuar")
+            else:
+                print("Esa tabla no existe")
+
         elif guia == 7: #Borrar
-            guia = input("¿En que tabla quieres borrar una fila?\n")
-            if guia == "Estudiantes" or "estudiantes" or "Asignacion" or "asignacion":
+            guia = input("¿En que tabla quieres borrar una fila?\n[1]Asignatura\n[2]Estudiantes")
+            if guia == "1":
+                guia = "Asignatura"
                 borrarFilas(guia)
+                input("Presione la tecla Enter para continuar")
+            elif guia == "2":
+                guia = "Estudiantes"
+                borrarFilas(guia)
+                input("Presione la tecla Enter para continuar")
             else:
                 print("Esa tabla no existe")
 

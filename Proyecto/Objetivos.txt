@@ -28,6 +28,6 @@
 #   Decision de busqueda entre la tabla Estudiantes y Asignaturas                               (HECHO)
 #   Busqueda en base a un parametro                                                                                 (HECHO)
 # 
-# - Agregar filas a la tabla                                                                                        (PENDIENTE)
+# - Agregar filas a la tabla                                                                                        (HECHO)
 #
 # - Actualizar datos de una tabla                                                                                   (PENDIENTE)
